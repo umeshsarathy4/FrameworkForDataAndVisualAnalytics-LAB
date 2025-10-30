@@ -1,0 +1,12 @@
+print(2+3)
+
+-Lists
+- **Bold text**
+- *Italic text*
+- [Links](https://jupyter.org/)
+
+import ipywidgets as widgets
+from IPython.display import display
+
+slider = widgets.IntSlider(value=25, min=0, max=100, description='Slider:')
+display(slider)

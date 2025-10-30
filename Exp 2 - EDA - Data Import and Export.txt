@@ -1,0 +1,55 @@
+import pandas as pd
+
+# Load CSV file
+df_csv = pd.read_csv('data.csv')
+print(df_csv.head())
+
+df_excel = pd.read_excel('data.xlsx', sheet_name='Sheet1')  # You can also use sheet_name=0 for the first sheet
+print(df_excel.head())
+
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Step 1: Create SQLite engine in-memory (temporary)
+engine = create_engine('sqlite://', echo=False)
+
+# Step 2: Create sample DataFrame
+df_sample = pd.DataFrame({
+    "Name": ["Alice", "Bob", "Charlie"],
+    "Age": [25, 30, 35]
+})
+
+# Step 3: Write DataFrame to SQL table called 'people'
+df_sample.to_sql("people", con=engine, index=False, if_exists='replace')
+
+# Step 4: Read from SQL table
+df_sql = pd.read_sql("SELECT * FROM people", con=engine)
+
+# Step 5: Display the result
+print("SQL Data:")
+print(df_sql)
+
+url = "https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)"
+tables = pd.read_html(url)
+
+print(f"Total tables found: {len(tables)}")
+df_web = tables[2]  # Pick the appropriate table
+print(df_web.head())
+
+url = 'https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)'
+
+# Step 2: Read all HTML tables from the page
+tables = pd.read_html(url)
+print(f"Total tables found: {len(tables)}")
+
+# Step 3: Inspect and choose the correct table (IMF or World Bank table)
+# We'll pick table[2] which usually contains GDP by IMF
+df = tables[2]
+
+# Step 4: Flatten MultiIndex columns if needed
+if isinstance(df.columns, pd.MultiIndex):
+    df.columns = [' '.join(col).strip() if isinstance(col, tuple) else col for col in df.columns]
+
+# Step 5: Export to Excel
+df.to_excel(r'C:\Users\REC\Desktop\127\gdp_table_correct.xlsx', index=False)
+print("GDP table exported to 'gdp_table_correct.xlsx' successfully.")

@@ -1,0 +1,55 @@
+import pandas as pd
+import seaborn as sns
+
+# Load the iris dataset
+iris = sns.load_dataset('iris')
+
+# 1. View first 5 rows
+print("First 5 rows:")
+print(iris.head(), "\n")
+
+# 2. Basic info about the dataframe
+print("Dataframe Info:")
+print(iris.info(), "\n")
+
+# 3. Summary statistics
+print("Summary statistics:")
+print(iris.describe(), "\n")
+
+# 4. Check columns
+print("Columns:")
+print(iris.columns, "\n")
+
+# 5. Check for missing values
+print("Missing values per column:")
+print(iris.isnull().sum(), "\n")
+
+# 6. Filtering: species = 'setosa' and sepal_length > 5.0
+filtered_data = iris[(iris['species'] == 'setosa') & (iris['sepal_length'] > 5.0)]
+print("Filtered Data (species='setosa' and sepal_length > 5.0):")
+print(filtered_data, "\n")
+
+# 7. Descriptive statistics for sepal_length
+
+mean_sepal_length = iris['sepal_length'].mean()
+median_sepal_length = iris['sepal_length'].median()
+mode_sepal_length = iris['sepal_length'].mode()[0]
+
+range_sepal_length = iris['sepal_length'].max() - iris['sepal_length'].min()
+variance_sepal_length = iris['sepal_length'].var()
+std_dev_sepal_length = iris['sepal_length'].std()
+
+print("Descriptive statistics for sepal_length:")
+print(f"Mean: {mean_sepal_length}")
+print(f"Median: {median_sepal_length}")
+print(f"Mode: {mode_sepal_length}")
+print(f"Range: {range_sepal_length}")
+print(f"Variance: {variance_sepal_length}")
+print(f"Standard Deviation: {std_dev_sepal_length}\n")
+
+# 8. Descriptive statistics grouped by species for sepal_length
+grouped_stats = iris.groupby('species')['sepal_length'].agg(['mean', 'median', 'var', 'std', 'min', 'max'])
+grouped_stats['range'] = grouped_stats['max'] - grouped_stats['min']
+
+print("Descriptive statistics for sepal_length grouped by species:")
+print(grouped_stats)

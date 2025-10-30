@@ -1,0 +1,44 @@
+import pandas as pd
+titanic = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/FDVA_CSV/Titanic/train (1).csv')
+titanic.head()
+
+titanic.isnull().sum()
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
+
+titanic['Age'] = titanic['Age'].fillna(titanic['Age'].median())
+
+titanic['Embarked'] = titanic['Embarked'].fillna(titanic['Embarked'].mode()[0])
+
+if 'Cabin' in titanic.columns:
+    titanic = titanic.drop('Cabin', axis=1)
+
+print("\nMissing values after handling:\n", titanic.isnull().sum())
+
+
+duplicates = titanic.duplicated().sum()
+print(f"\nNumber of duplicate rows: {duplicates}")
+titanic.drop_duplicates(inplace=True)
+
+print("\nData types before conversion:\n", titanic.dtypes)
+
+cat_cols = ['Survived', 'Pclass', 'SibSp', 'Parch']
+for col in cat_cols:
+    titanic[col] = titanic[col].astype('category')
+
+titanic['Fare'] = titanic['Fare'].astype(float)
+titanic['Age'] = titanic['Age'].astype(float)
+
+print("\nData types after conversion:\n", titanic.dtypes)
+
+
+num_cols = ['Age', 'Fare']
+
+scaler = StandardScaler()
+titanic[num_cols] = scaler.fit_transform(titanic[num_cols])
+
+
+print("\nData after normalization:\n", titanic.head())
+
+titanic.to_csv('titanic_cleaned.csv', index=False)

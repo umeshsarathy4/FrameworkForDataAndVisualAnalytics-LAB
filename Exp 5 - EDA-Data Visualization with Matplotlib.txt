@@ -1,0 +1,38 @@
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the Titanic dataset
+titanic = sns.load_dataset('titanic')
+
+# 1. Line chart: Average age of passengers by class
+age_by_class = titanic.groupby('class')['age'].mean()
+
+plt.figure(figsize=(8, 5))
+plt.plot(age_by_class.index, age_by_class.values, marker='o', linestyle='-', color='b')
+plt.title('Average Age of Passengers by Class')
+plt.xlabel('Class')
+plt.ylabel('Average Age')
+plt.grid(True)
+plt.show()
+print()
+print()
+# 2. Bar chart: Count of passengers by embark_town
+embark_counts = titanic['embark_town'].value_counts()
+
+plt.figure(figsize=(8, 5))
+plt.bar(embark_counts.index, embark_counts.values, color='orange')
+plt.title('Number of Passengers by Embark Town')
+plt.xlabel('Embark Town')
+plt.ylabel('Count')
+plt.show()
+
+print()
+print()
+# 3. Histogram: Distribution of passenger ages
+plt.figure(figsize=(8, 5))
+plt.hist(titanic['age'].dropna(), bins=30, color='green', edgecolor='black')
+plt.title('Distribution of Passenger Ages')
+plt.xlabel('Age')
+plt.ylabel('Frequency')
+plt.show()
+print()
